@@ -1,36 +1,37 @@
-let comments = require("../comments")
 
-//get - all comments
-exports.list = function list(req, res) {
-    return res.json(comments);
+const {getDatabase} = require("../database");
+const comments = require('../comments');
+
+//get all comments
+exports.list = function list(req,res) {
+  let db = getDatabase();
+  const collection = db.collection('comments');
+  collection.insertMany(comments, function(err, result) {
+  // Find some documents
+  let found = collection.find({});
+  found.toArray(function(err, comments) {
+    res.json(comments)
+  });
+})
 }
 
-//get - one comment
-exports.show = function list(req, res) {
-    let comment = comments.find(p=>p._id === Number(req.params.id));
+//get one comment
+exports.show = function show(req,res) {
+  let db = getDatabase();
+  const collection = db.collection('comments');
+  // Find some documents
+  let id = req.params.id;
+  let found = collection.find({_id:id});
+  found.toArray(function(err, comment) { 
     res.json(comment)
+  });
 }
-
-//post
+//post new comment
 exports.create = function list(req, res) {
-    let id = comments.length + 1;
-    let body = req.body.body;
-    let postId = req.body.postId;
-    comments.push({"_id":id, "body":body, "postId":postId})
-    res.json(comments);
-}
-
-//put
-exports.update = function list(req, res) {
-    let comment = comments.find(p=>p._id === Number(req.params.id));
-    comment.body = body.body;
-    comment.postId = body.postId;
-    res.json(comment)
-}
-
-//delete
-exports.remove = function list(req, res) {
-    let comment = comments.find(p=>p._id === Number(req.params.id));
-    comment.isActive = false;
-    res.send("deleted");
+  let db = getDatabase();
+  const collection = db.collection('comments');
+  // Insert some documents
+  collection.insertMany([req.body], function(err, result) {
+  res.json(comments);
+  }); 
 }

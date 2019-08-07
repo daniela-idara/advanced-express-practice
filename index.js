@@ -1,4 +1,5 @@
 let express = require("express");
+let {connect} = require("./database");
 let comments = require("./routes/comments");
 let contacts  = require("./routes/contacts");
 let products = require("./routes/products");
@@ -15,6 +16,11 @@ app.use(products);
 app.use(vehicles);
 
 const thePort = 3001;
+
+connect(()=>{
+  //start web server
+});
+
 app.listen(thePort, (err) => {
  if (err) {
    return console.log("Error", err);
