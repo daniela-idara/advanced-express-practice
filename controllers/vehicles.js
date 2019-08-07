@@ -1,40 +1,24 @@
-let vehicles = require("../vehicles");
-
+let VehicleModel = require("../models/vehicles")
 
 //get - all vehicles
 exports.list = function list(req, res) {
-    return res.json(vehicles);
+    VehicleModel.find((e,vehicles)=>{
+        return res.json(vehicles);
+    }); 
 }
 
 //get - one vehicle
-exports.show = function list(req, res) {
-    let vehicle = vehicles.find(p=>p._id === Number(req.params.id));
-    res.json(vehicle)
+exports.show = function show(req, res) {
+    VehicleModel.findById(req.params.id, (err,vehicles)=>{
+        return res.json(vehicles);
+    });
 }
 
 //post
-exports.create = function list(req, res) {
-    let id = vehicles.length + 1;
-    let year = req.body.year;
-    let make = req.body.make;
-    let model = req.body.model;
-    vehicles.push({year, make, model, "_id":id, "Vehicle Year":year, "Vehicle Make":make, "Vehicle Model":model})
-    res.json(vehicles);
-}
-
-//put
-exports.update = function list(req, res) {
-    let vehicle = vehicles.find(p=>p._id === Number(req.params.id));
-    vehicle.year = body.year;
-    vehicle.make = body.make;
-    vehicle.model = body.model;
-    res.json(vehicle)
-}
-
-//delete
-exports.remove = function list(req, res) {
-    let vehicle = vehicles.find(p=>p._id === Number(req.params.id));
-    vehicle.isActive = false;
-    res.send("deleted");
+exports.create = function create(req, res) {
+    let newVehicle = new VehicleModel(req.body);
+    newVehicle.save(()=>{
+        return res.json(newVehicle);
+    });
 }
 
